@@ -1,2 +1,2 @@
 # gimp2acv
-Converts GIMP curves to Adobe ACV curves
+Converts GIMP curves to Adobe .acv curves
