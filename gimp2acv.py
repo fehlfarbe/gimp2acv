@@ -9,25 +9,14 @@ import numpy as np
 from optparse import OptionParser
 from acv import ACVCurve
 
+def is_old_format(f):
+    line = f.readline()
+    f.seek(0)
+    if line.startswith("# GIMP Curves File"):
+        return True
+    return False
 
-if __name__ == '__main__':
-    
-    parser = OptionParser()
-    parser.add_option("-i", "--input", dest="input", metavar="FILE",
-                  help="Input GIMP curve filename", default=None)
-    parser.add_option("-o", "--output", dest="output", metavar="FILE",
-                  help="Output Adobe *.acv curve filename", default=None)
-    (options, args) = parser.parse_args()
-    
-    if options.input == None:
-        parser.print_help()
-        exit(-1)
-    if options.output == None:
-        output = options.input + ".acv"
-    else:
-        output = options.output
-    
-    with open(options.input, 'rb') as f:
+def convert_new_format(f):
         acv_curve = ACVCurve()
 
         for l in f.readlines():
@@ -58,5 +47,60 @@ if __name__ == '__main__':
                 #plt.scatter([v[1] for v in curve], [v[0] for v in curve], marker='o', color='r')
                 #plt.show()  
                 acv_curve.curves.append(curve)
-
-        acv_curve.to_file(output)
+        return acv_curve
+        #acv_curve.to_file(output)
+        
+def convert_old_format(f):
+    acv_curve = ACVCurve()
+    
+    for line in f.readlines():
+        line = line.replace('\n', '')
+        # ignore comments
+        if line.startswith('#'):
+            continue
+        
+        curve = []
+        points = [int(val) for val in line.strip().split(' ')]
+        for i in xrange(0,len(points)-1,2):
+            # ignore points with -1 value
+            if points[i] != -1:
+                # x,y swapped?
+                curve.append([points[i+1], points[i]])
+        if len(curve) > 16:
+            print "Warning: %d points in curve! Photoshop point limit is <= 16 points." % len(curve)
+        acv_curve.curves.append(curve)    
+    return acv_curve
+    
+if __name__ == '__main__':
+    
+    parser = OptionParser()
+    parser.add_option("-i", "--input", dest="input", metavar="FILE",
+                  help="Input GIMP curve filename", default=None)
+    parser.add_option("-o", "--output", dest="output", metavar="FILE",
+                  help="Output Adobe *.acv curve filename", default=None)
+    (options, args) = parser.parse_args()
+    if options.input is None and len(args) == 0:
+        parser.print_help()
+        exit(-1)
+    if options.input is not None:
+        input = options.input
+    else:
+        input = args[0]
+    
+    if options.output is None:
+        output = input + ".acv"
+    else:
+        output = options.output
+        if not output.endswith('.acv'):
+            output += ".acv"
+    
+    with open(input, 'rb') as f:
+        if is_old_format(f):
+            print "curve is in old format"
+            curve = convert_old_format(f)
+        else:
+            print "curve is in new format"
+            curve = convert_new_format(f)
+        
+        curve.to_file(output)
+        print "converted %s to %s" % (input, output)
