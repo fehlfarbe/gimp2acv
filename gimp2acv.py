@@ -5,6 +5,7 @@ Created on 03.11.2015
 @author: Marcus Degenkolbe
 '''
 #import matplotlib.pyplot as plt
+import sys
 import numpy as np
 from optparse import OptionParser
 from acv import ACVCurve
@@ -81,7 +82,7 @@ if __name__ == '__main__':
     (options, args) = parser.parse_args()
     if options.input is None and len(args) == 0:
         parser.print_help()
-        exit(-1)
+        sys.exit(-1)
     if options.input is not None:
         input = options.input
     else:
