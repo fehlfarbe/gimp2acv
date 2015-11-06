@@ -31,9 +31,9 @@ a.binaries = a.binaries - TOC([
 	('mfc90u.dll', None, None),
 	('mfcm90.dll', None, None),
 	('mfcm90u.dll', None, None),
-	('msvcr90.dll', None, None),
-	('msvcm90.dll', None, None),
-	('msvcp90.dll', None, None),
+	#('msvcr90.dll', None, None),
+	#('msvcm90.dll', None, None),
+	#('msvcp90.dll', None, None),
 	('_tkinter', None, None)])
 
 
