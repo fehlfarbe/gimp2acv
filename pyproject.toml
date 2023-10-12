@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "gimp2acv"
+version = "0.1.0"
+description = ""
+authors = ["fehlfarbe <marcus@degenkolbe.eu>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.13"
+numpy = "^1.26.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
