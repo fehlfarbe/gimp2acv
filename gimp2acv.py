@@ -22,7 +22,7 @@ if __name__ == '__main__':
     if options.output is None:
         outputFile = f"{inputFile}.acv"
     else:
-        outputFile = options.outputFile
+        outputFile = options.output
         if not outputFile.endswith('.acv'):
             outputFile = f"{outputFile}.acv"
 
