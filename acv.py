@@ -144,7 +144,7 @@ class ACVCurve:
         import matplotlib.pyplot as plt
 
         for curve in self._curves:
-            points = np.array([(x, y) for y, x in curve])
+            points = np.array([(x, y) for x, y in curve])
             plt.plot(points[:, 0], points[:, 1])
             plt.scatter(points[:, 0], points[:, 1], marker='o')
         plt.xlim(0, 255)
